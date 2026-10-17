@@ -1,0 +1,6 @@
+   data/*.csv
+   data/*.sav
+   data/*.xlsx
+   .ipynb_checkpoints/
+   __pycache__/
+   .DS_Store
