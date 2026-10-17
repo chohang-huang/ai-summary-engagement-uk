@@ -6,8 +6,12 @@
 
 ---
 
-## 1. 研究背景（3–5 句）
-💭 为什么这个问题值得研究？提示：AI 摘要出现在搜索结果最上方，人们可能没有主动选择也在接触 AI 信息；信任和使用可能不是一回事。
+## 1. 研究背景
+Generative AI is now entering people's everyday information activities in two different ways. The first is passive exposure: when people use search engines such as Google, AI-generated summaries may appear automatically at the top of the results, so users may encounter AI content even without choosing to use AI. The second is active use: people deliberately open tools such as ChatGPT, Gemini or Copilot and use them for tasks such as work, study, writing, finding information or getting recommendations.
+
+Previous research suggests that trust in and attitudes towards AI are associated with whether people use AI (Kelly, Kaye and Oviedo-Trespalacios, 2023). At the same time, generative AI use varies considerably across groups, for example by age, education and gender (Bick, Blandin and Deming, 2024; Humlum and Vestergaard, 2025). Moreover, whether through passive exposure or active use, people often turn to AI for several practical reasons at once, such as saving time or working more efficiently, so trust, personal characteristics and everyday digital habits are likely to overlap and interact. However, the relative importance of these factors in people's actual AI use remains unclear.
+
+This project therefore asks: among UK adults, which factors are most strongly associated with how often people read AI search summaries, and how broadly they use generative AI? Is AI use more closely associated with attitudes towards AI, or with everyday digital habits? Answering these questions helps explain how unevenly AI-generated information reaches different groups, with implications for digital literacy education and AI product design.
 
 ## 2. 研究问题
 - **RQ1**：哪些因素与英国成年人阅读 AI 搜索摘要的频率相关？
@@ -92,3 +96,9 @@
 1. 这个项目能否作为课程 final project？
 2. 二手公开数据需要 ethics 审批吗？
 3. 💭 你自己最没把握的一个方法问题
+
+## References
+
+- Bick, A., Blandin, A. and Deming, D. J. (2024) *The Rapid Adoption of Generative AI*. NBER Working Paper No. 32966. Cambridge, MA: National Bureau of Economic Research.
+- Humlum, A. and Vestergaard, E. (2025) 'The unequal adoption of ChatGPT exacerbates existing inequalities among workers', *Proceedings of the National Academy of Sciences*, 122(1), e2414972121. https://doi.org/10.1073/pnas.2414972121
+- Kelly, S., Kaye, S. A. and Oviedo-Trespalacios, O. (2023) 'What factors contribute to the acceptance of artificial intelligence? A systematic review', *Telematics and Informatics*, 77, 101925. https://doi.org/10.1016/j.tele.2022.101925
