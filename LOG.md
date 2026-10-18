@@ -128,8 +128,6 @@
     and decide how to handle it.
   - Possibly build a survey mode × age (S3) cross-tab with the same method to check
     explanation (a).
-  - Update the 10/8 entry: the two points I have now verified myself (spaces in blank
-    cells, N = 3,515) should be marked as "verified myself on 10/17".
 
 ## 2026-10-18 (time: ~3 h)
 - **What I did:**
