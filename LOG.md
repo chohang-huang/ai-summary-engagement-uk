@@ -16,7 +16,20 @@
 
 ---
 
-<!-- ⚠️ 下面两条是根据前两天实际发生的事整理的草稿，请用你自己的话重写，删掉不符合的部分 -->
+## 2026-10-07
+- **What I did:** After the Business Analytics for AI lecture, I talked to the lecturer
+  about my project idea (AI use, applying the regression and clustering methods from the
+  course). He agreed to discuss it further in office hours. I decided to use the public
+  Ofcom Adults' Media Literacy Tracker 2025 data.
+- **Problems I ran into:** At first I wanted to study "AI reliance", but question A6 only
+  asks how often people read AI summaries, and reading a summary is not the same as
+  relying on it.
+- **How I solved it:** Narrowed the research focus to how often people read AI summaries
+  (Y1) and the breadth of AI use (Y2), and kept "reliance" only as a background concept.
+- **Limitations found:** The data is cross-sectional, so I can only talk about
+  associations and prediction, not causation.
+- **Next step:** Download the data and the codebook, and check whether all the
+  variables I need are available.
 
 ## 2026-10-17 (time: ~3 h)
 - **What I did:** Learned how to read the raw Ofcom data and match it to the codebook.
@@ -118,21 +131,71 @@
   - Update the 10/8 entry: the two points I have now verified myself (spaces in blank
     cells, N = 3,515) should be marked as "verified myself on 10/17".
 
-## 2026-10-07
-- 做了什么：上完 Business Analytics for AI 课后和老师聊了项目想法（AI 使用 + 课上的回归、聚类），老师同意以后 office hour 讨论。确定用 Ofcom Adults' Media Literacy Tracker 2025 的公开数据，替换原计划的 Olist 电商项目。
-- 遇到的问题：最初想研究"AI reliance（依赖）"，但问卷里的 A6 只问"多常读 AI 摘要"，读了不等于依赖。
-- 怎么解决的：把研究对象收窄为"AI 摘要阅读频率（Y1）"和"AI 使用广度（Y2）"，reliance 只作为背景概念。
-- 发现的局限：横截面数据，只能说相关和预测，不能说因果。
-- 下一步：下载数据和 codebook，确认变量是否齐全。
+## 2026-10-18 (time: ~3 h)
+- **What I did:**
+  1. **Task 4 – income "don't know / prefer not to say" (E9 = 8).**
+     - Copied column UR (E9) into my practice sheet (column P).
+     - Counted E9 = 8 with COUNTIFS (three conditions: MODULEA = 1, INTUSED = 1, E9 = 8):
+       727 of the 3,515 respondents in the A6 sample (20.7%).
+     - Built a 2 × 5 cross-tab of income DK vs other × A6. For the "other" row I used
+       =G2+G3-G10 (all respondents minus the DK group) instead of writing a new COUNTIFS.
+       Total check: 727 + 2,788 = 3,515.
+     - "Never read" + "never seen": 37.4% in the income-DK group vs 21.2% among others.
+  2. **Task 5 – routing missing in A4 / A5.**
+     - Looked up A1, A2, SUMAI, A4 and A5 in the codebook. SUMAI is not a question but a
+       summary variable built from A1 and A2: 1 = aware and ever used AI, 2 = aware but
+       never used, 3 = unaware of AI.
+     - Copied SUMAI, A4 and A5 into my practice sheet and counted with COUNTIFS, using
+       ">=1" to mean "has an answer". In the A6 sample: SUMAI = 3: 241; A4 answered: 3,274;
+       241 + 3,274 = 3,515. Among SUMAI = 3, nobody answered A4 or A5.
+     - So A4 and A5 are skipped for respondents who have never heard of AI (routing
+       missing). This is different from A4 = 4 ("don't know"), which means the person was
+       asked, is aware of AI, but is unsure.
+     - SUMAI × A6: "never read" + "never seen" = 9.6% (used AI),
+       43.1% (aware, never used), 58.9% (unaware). Yet about 41% of the unaware group
+       still read AI summaries at least sometimes. Many people read AI summaries without
+       recognising them as AI, which fits the "passive exposure" idea in the plan.
+  3. **Task 6 – the coarse BREADTH variable.**
+     - In the codebook, BREADTH groups internet use into 4 bands based on 13 online
+       activities (Q13A–Q13M, each 0 = no, 1 = yes): 1 = none, 2 = narrow (1–4),
+       3 = medium (5–8), 4 = broad (9–13).
+     - Copied Q13A–Q13M (columns DP–EB, 13 columns) and BREADTH (EE) into my practice
+       sheet. Did not include Q13N ("any of these") and Q13O ("none of these"), which are
+       summaries, not activities.
+     - Built my own activity count (0–13) with =SUM(AD2:AP2) and filled it down all rows
+       by double-clicking the fill handle.
+     - Within the A6 sample, compared two groups that BREADTH both codes as "broad":
+       9 activities: 57 of 371 never read / never seen (15.4%);
+       13 activities: 7 of 136 (5.1%) – about three times lower.
+     - Across the full 0–13 range, the share of non-readers falls
+       fairly steadily from 83% (0 activities) to 5% (13 activities).
 
-## 2026-10-08
-- 做了什么：下载 CSV（7,533 × 566）和 SPSS codebook，做数据审计。
-- 遇到的问题：
-  1. 空值存成了空格 `' '`，直接读入时整列变成文字，需要加 `na_values=' '`。
-  2. AI 题只在 Module 1（3,768 人），A6 有效 N = 3,515，A3 有效 N = 2,061，不能说用了 7,533 人。
-  3. face-to-face 和 online 受访者的 A6 分布差别很大（"从不 / 没见过"占比：44% vs 19%）。
-  4. 收入有 21% 选了"不知道 / 不愿说"。
-- 怎么解决的：调查方式 P_METHOD 作为控制变量；收入的"不知道"保留为单独一类；没听说过 AI 的人在 A4/A5 上单独设一类（routing missing，不是普通缺失）。
-- 发现的局限：现成的 BREADTH 变量只有 4 档太粗，改用 Q13A–M 自己加总（0–13）。
-- 其他：看过一次 Claude 跑的参考运行，用来确认项目可行、提前看到终点；正式分析由我自己从头做。
-- 下一步：写项目规划书，建 GitHub 仓库。
+- **New spreadsheet skills:**
+  - Text conditions in COUNTIFS: ">=1" to count cells that have an answer, ">=4" to
+    count A6 = 4 and 5 together.
+  - Using existing totals to get a complement row (=G2+G3-G10) instead of a new formula.
+  - Selecting several adjacent columns with Shift + click, and filling a formula down
+    thousands of rows by double-clicking the fill handle.
+  - Searching for a variable name with Cmd+F and "match entire cell contents", so that
+    searching "A4" does not also find A4A, QA4, etc.
+
+- **Problems I ran into:**
+1. My first COUNTIFS with ">=1" failed because I used single quotes ('>=1'). Text
+     conditions need straight double quotes (">=1"), typed with an English keyboard.
+
+- **Decisions:**
+  - Income DK and AI-unaware respondents are not random subsets: both groups are much
+    less likely to read AI summaries. Dropping them would shrink the sample and make the
+    remaining respondents look more engaged than they really are (biased results).
+  - Keep E9 = 8 as a separate income category (like A6 = 5), instead of dropping it or
+    treating 8 as "higher than band 7".
+  - Do not drop the 241 AI-unaware respondents. Give A4 and A5 an extra category
+    "unaware of AI / not asked", separate from A4 = 4 "don't know".
+  - Use my own 0–13 activity count instead of BREADTH, because BREADTH puts people with
+    9 and 13 activities in the same band and hides a clear difference.
+
+- **Next step:**
+  - All six data checks are done.
+  - Continue PLAN.md section 2 (research questions).
+
+
