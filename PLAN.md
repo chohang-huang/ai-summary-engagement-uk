@@ -1,6 +1,6 @@
 # Project Plan
 
-> Version：v1（2026-10-20）
+> Version: v1 (20 October 2026)
 
 ---
 
@@ -136,7 +136,7 @@ income and AI awareness).
 ## 9. Deliverables and Timeline
 | Deliverable | Target date |
 |---|---|
-| Plan v1 (sections 1–5, 11) | 20 Oct |
+| Plan v1 (sections 1–8, 11) | 20 Oct |
 | Python basics + data cleaning | 1 Nov |
 | EDA | 7 Nov |
 | Regression | 15 Nov |
