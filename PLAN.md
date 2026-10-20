@@ -52,13 +52,19 @@ Note: SUMAI and Y1 may influence each other (using AI may lead to reading AI sum
 ### Control variable
 Survey mode (P_METHOD: online vs face-to-face CAPI) is included in all models. In the data, 43% of face-to-face respondents never read or have never seen AI summaries, compared with 19% of online respondents. Face-to-face respondents may also differ from online respondents in other characteristics, so without this control the models could wrongly attribute mode differences to other variables.
 
-## 5. 假设（**在看结果之前写，写你真实的猜测**）
-| ID | 假设 | 方向 | 理由 |
+## 5. Hypotheses
+These hypotheses were written before running any models. Some were formed after seeing
+descriptive patterns during the data checks (e.g. cross-tabulations of A6 by survey mode,
+income and AI awareness).
+
+| ID | Hypothesis | Direction | Reasoning |
 |---|---|---|---|
-| H1 | 💭 | +/− | 💭 |
-| H2 | 💭 | | |
-| H3 | 💭 | | |
-| H4 | 💭（关于 RQ4：哪一组会增加最多预测力？） | | |
+| H1 (RQ1) | People who do more types of online activity read AI summaries more often. | + | The more people use the internet, the more often AI summaries appear automatically in their searches, so they are more likely to notice and read them. |
+| H2 (RQ1) | Trust in AI-written content (A4) is only weakly associated with how often people read AI summaries. | ~0 (weak) | AI summaries appear automatically, so both trusting and distrusting users may read them often. The difference may be in how they read them: distrustful users may read more critically, but this cannot be measured with this data. |
+| H3 (RQ2) | Among AI users, younger people (especially those aged 16–24) use AI for a wider range of purposes. | − (age) | Younger people have grown up with digital technology and are more likely to try AI for study, work and everyday tasks. |
+| H4 (RQ4) | Adding digital habits improves prediction more than adding attitudes towards AI. | Digital habits > AI attitudes | Following H1 and H2: digital habits are expected to be strongly associated with AI use, while trust is expected to be only weakly associated. |
+| H5 (RQ3) | Machine-learning models predict both outcomes more accurately than traditional statistical models. | ML > regression | Online behaviour is complex, and factors may combine with each other (for example, age may matter more for people who use the internet less), which flexible models can capture better. |
+| H6 (RQ1) | The association between age and reading AI summaries becomes clearly weaker once digital habits are added to the model. | Age effect shrinks after controlling for digital habits | Older people may read AI summaries less mainly because they go online less and do fewer things online, not because of age itself. If the age effect remains strong after adding digital habits, other reasons (e.g. distrust of new technology) may also play a role. |
 
 ## 6. 方法：每个模型 + 它的假设 + 怎么检验
 | 模型 | 用于 | 关键假设 | 怎么检验假设 / 假设不成立怎么办 |
