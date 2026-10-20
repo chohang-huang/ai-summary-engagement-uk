@@ -1,19 +1,5 @@
 # 项目日志 / Research Log
 
-> 每次做完写 5 分钟。写真实发生的事，包括卡住、走错路和改主意，这些正是日志最有价值的部分。
-> 面试被问"你遇到过什么困难"时，答案就在这里。
-
-## 模板（复制使用）
-```
-## YYYY-MM-DD（用时：x 小时）
-- 做了什么：
-- 遇到的问题：
-- 怎么解决的 / 还没解决：
-- 发现的局限：
-- 想到的优化：
-- 下一步：
-```
-
 ---
 
 ## 2026-10-07
@@ -196,4 +182,55 @@
   - All six data checks are done.
   - Continue PLAN.md section 2 (research questions).
 
+## 2026-10-20 (time: ~4 h)
+- **What I did:** Completed PLAN.md v1 (sections 2–8).
+  1. **Research questions**
+     - RQ1: Which factors are most strongly associated with how often UK adults read the
+       AI-generated summaries that appear automatically in search results?
+     - RQ2: Among AI users, which factors are most strongly associated with the breadth of
+       AI use (number of purposes)?
+     - RQ3: Do machine-learning models predict more accurately out of sample than
+       traditional statistical models?
+     - RQ4: Beyond demographics, how much additional predictive power do digital habits and
+       attitudes towards AI each provide?
+  2. **Data and sample:** Y1 sample N = 3,515; after excluding the 337 respondents who have
+     never seen AI summaries, N = 3,178. Y2 sample: 2,061 AI users. Weights are used for
+     descriptive statistics; models are unweighted, with a weighted run as a robustness check.
+  3. **Variables:** Y1 reverse-coded as 0 = never to 3 = always (ordinal); Y2 = number of
+     the 8 purposes in A3A–A3H (count). Predictors grouped into demographics, digital habits
+     and AI attitudes; survey mode (P_METHOD) as a control variable.
+  4. **Hypotheses**
+     - H1: People who do more types of online activity read AI summaries more often.
+     - H2: Trust in AI is only weakly associated with how often people read AI summaries.
+     - H3: Among AI users, younger people (especially 16–24) use AI for more purposes.
+     - H4: Adding digital habits improves prediction more than adding attitudes towards AI.
+     - H5: Machine-learning models predict more accurately than traditional statistical models.
+     - H6: The association between age and reading AI summaries becomes clearly weaker once
+       digital habits are added.
+  5. **Methods, evaluation, limitations:** Set out each model, its assumptions and how they
+     will be checked, with model selection rules fixed before seeing results. Evaluation:
+     80/20 split + 5-fold cross-validation; QWK for Y1, MAE for Y2, compared with baselines.
+     Listed seven expected limitations.
 
+- **Concepts I learned:**
+  - The variable type decides the model: ordinal → ordered logit; count → Poisson / binomial.
+  - Proportional odds (parallel lines) assumption, dispersion, overfitting, regularisation,
+    train/test split, cross-validation, random seeds.
+  - How k-means works, why variables need standardising, and how to choose k.
+  - Why accuracy alone is not enough; data leakage.
+  - Control variables and reverse causality.
+
+- **Problems I ran into:**
+  1. For non-AI users, A3 is coded 0 rather than left blank, so the sample must be filtered
+     on SUMAI = 1 before building Y2.
+  2. The assumption that face-to-face respondents are older did not hold when checked
+     against the data (75+: 8% vs 5%), so I removed "age" from that explanation in
+     section 4. Lesson: every claim should be checked against the data.
+  3. The figure in section 8 (about 41% of respondents who have never heard of AI still read
+     AI summaries) still needs to be reproduced in Python.
+
+- **Next step:**
+  - Learn pandas in Google Colab: load the CSV and redo the Excel checks with
+    `value_counts()` and `pd.crosstab()`, including reproducing the 41% figure.
+  - Then start data cleaning: select the samples and handle missing values and special codes
+    (A6 = 5, E9 = 8, and respondents not asked A4/A5) as set out in the plan.
