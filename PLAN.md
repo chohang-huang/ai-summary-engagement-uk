@@ -33,22 +33,24 @@ This project therefore asks: among UK adults, which factors are most strongly as
 | Y2 sample | A3 (AI uses) applies only to AI users (SUMAI = 1): N = 2,061. Non-users are coded 0 rather than left blank, so the sample must be filtered on SUMAI before building Y2. |
 | Weights | The weighting variable WT will be used for descriptive statistics, so that percentages represent the UK adult population. Models will be estimated unweighted, because the variables used to build the weights (e.g. age, gender) are included as predictors; weighted models will be run as a sensitivity check. |
 
-## 4. 变量定义
-### 因变量
-| | 变量 | 编码方式 | 类型 |
+## 4. Variables
+### Dependent variables
+| | Source | Coding | Type |
 |---|---|---|---|
-| Y1 | A6 | 💭 | 💭 |
-| Y2 | A3A–A3H | 💭 哪些选项计入？Other / Don't know 怎么处理？ | 💭 |
+| Y1 | A6 (how often the respondent reads AI summaries in search results) | Reverse-coded so that higher = more reading: 0 = never, 1 = sometimes, 2 = often, 3 = always. A6 = 5 ("never seen / don't know") is excluded from the model and described separately. | Ordinal |
+| Y2 | A3A–A3H (eight specific purposes of AI use) | Number of purposes selected (0–8), among AI users only (SUMAI = 1). Net/summary codes (e.g. A3K "work or education", which combines A3A and A3B), "other" and "don't know" are not counted, to avoid double counting. | Count |
 
-### 自变量（三组）
-| 组 | 变量 | 处理方式 |
+### Independent variables (three blocks)
+| Block | Variables | Treatment |
 |---|---|---|
-| A 人口特征 | 💭 | 💭 |
-| B 数字行为 | 💭 | 💭 |
-| C AI 态度 | 💭 | 💭 "没听说过 AI"的人怎么处理？ |
+| A. Demographics | Age (S3), gender (S4), education (E5), working status (S9), socio-economic group (SEG), household income (E9), nation/region (REGION1), urban/rural (URBAN) | Categorical (dummy-coded). Small categories will be merged. Income "don't know / prefer not to say" (E9 = 8) is kept as a separate category. |
+| B. Digital habits | Number of online activities (0–13, summed from Q13A–Q13M), number of devices used (Q10), time spent online per week (S1), online confidence (Q12A–Q12D), number of social media platforms used (Q16), trying new websites/apps (A7) | Own 0–13 activity count used instead of BREADTH, because BREADTH groups 9–13 activities into one band and hides clear differences. "Don't know" answers kept as a separate category where needed. |
+| C. AI attitudes and experience | Trust in AI-written news (A4), confidence in recognising AI content (A5), AI awareness and use (SUMAI, Y1 models only) | Respondents who have never heard of AI were not asked A4/A5; they get a separate category "unaware of AI / not asked", distinct from "don't know". SUMAI is not used in Y2 models because all Y2 respondents are AI users. |
 
-### 控制变量
-💭 P_METHOD 为什么必须放进模型？
+Note: SUMAI and Y1 may influence each other (using AI may lead to reading AI summaries, and vice versa), so its association with Y1 cannot be interpreted causally.
+
+### Control variable
+Survey mode (P_METHOD: online vs face-to-face CAPI) is included in all models. In the data, 43% of face-to-face respondents never read or have never seen AI summaries, compared with 19% of online respondents. Face-to-face respondents may also differ from online respondents in other characteristics, so without this control the models could wrongly attribute mode differences to other variables.
 
 ## 5. 假设（**在看结果之前写，写你真实的猜测**）
 | ID | 假设 | 方向 | 理由 |
