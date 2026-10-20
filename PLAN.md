@@ -13,11 +13,15 @@ Previous research suggests that trust in and attitudes towards AI are associated
 
 This project therefore asks: among UK adults, which factors are most strongly associated with how often people read AI search summaries, and how broadly they use generative AI? Is AI use more closely associated with attitudes towards AI, or with everyday digital habits? Answering these questions helps explain how unevenly AI-generated information reaches different groups, with implications for digital literacy education and AI product design.
 
-## 2. 研究问题
-- **RQ1**：哪些因素与英国成年人阅读 AI 搜索摘要的频率相关？
-- **RQ2**：在 AI 用户中，哪些因素与 AI 使用广度相关？
-- **RQ3**：机器学习模型的样本外预测是否优于传统统计模型？
-- **RQ4**：在人口特征之外，数字行为和 AI 态度分别能增加多少预测力？
+## 2. Research Questions
+- **RQ1:** Which factors are most strongly associated with how often UK adults read
+  the AI-generated summaries that appear automatically in search results?
+- **RQ2:** Among AI users, which factors are most strongly associated with the breadth
+  of generative AI use (the number of different purposes AI is used for)?
+- **RQ3:** Do machine-learning models (random forest, XGBoost) predict these two
+  outcomes more accurately out of sample than traditional statistical models?
+- **RQ4:** Beyond demographic characteristics, how much additional predictive power do
+  everyday digital habits and attitudes towards AI each provide?
 
 ## 3. 数据与样本
 | 项目 | 内容 |
