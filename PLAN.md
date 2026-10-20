@@ -23,15 +23,15 @@ This project therefore asks: among UK adults, which factors are most strongly as
 - **RQ4:** Beyond demographic characteristics, how much additional predictive power do
   everyday digital habits and attitudes towards AI each provide?
 
-## 3. 数据与样本
-| 项目 | 内容 |
+## 3. Data and Sample
+| Item | Details |
 |---|---|
-| 数据 | Ofcom Adults' Media Literacy Tracker 2025，respondent-level CSV |
-| 总样本 | 7,533（face-to-face 2,084 / online 5,449） |
-| AI 模块 | Module 1，N = 3,768 |
-| Y1 样本 | 💭 谁被问了 A6？排除"没见过"后剩多少人？为什么要排除？ |
-| Y2 样本 | 💭 谁被问了 A3？ |
-| 权重 | WT：描述统计用；建模 💭 用不用？为什么？ |
+| Data | Ofcom Adults' Media Literacy Tracker 2025, respondent-level CSV, with SPSS codebook |
+| Total sample | 7,533 UK adults (online 5,449 / face-to-face CAPI 2,084) |
+| AI module | The AI questions (A1–A11) are only in Module 1, which was given to 3,768 respondents |
+| Y1 sample | A6 was asked only of Module 1 respondents who use the internet: N = 3,515. Respondents who answered "never seen these summaries / don't know what they are" (A6 = 5, n = 337) are not on the frequency scale, so they are excluded from the ordinal model (N = 3,178) and described separately. |
+| Y2 sample | A3 (AI uses) applies only to AI users (SUMAI = 1): N = 2,061. Non-users are coded 0 rather than left blank, so the sample must be filtered on SUMAI before building Y2. |
+| Weights | The weighting variable WT will be used for descriptive statistics, so that percentages represent the UK adult population. Models will be estimated unweighted, because the variables used to build the weights (e.g. age, gender) are included as predictors; weighted models will be run as a sensitivity check. |
 
 ## 4. 变量定义
 ### 因变量
