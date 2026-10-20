@@ -1,12 +1,10 @@
-# 项目规划书 / Project Plan
+# Project Plan
 
-> 在**跑任何模型之前**写完 v1，之后有改动就在第 10 节记录，不要直接覆盖旧内容。
-> 💭 标记的地方是需要你自己思考后填写的。
-> 版本：v1（2026-10-__）
+> Version：v1（2026-10-20）
 
 ---
 
-## 1. 研究背景
+## 1. Research Background
 Generative AI is now entering people's everyday information activities in two different ways. The first is passive exposure: when people use search engines such as Google, AI-generated summaries may appear automatically at the top of the results, so users may encounter AI content even without choosing to use AI. The second is active use: people deliberately open tools such as ChatGPT, Gemini or Copilot and use them for tasks such as work, study, writing, finding information or getting recommendations.
 
 Previous research suggests that trust in and attitudes towards AI are associated with whether people use AI (Kelly, Kaye and Oviedo-Trespalacios, 2023). At the same time, generative AI use varies considerably across groups, for example by age, education and gender (Bick, Blandin and Deming, 2024; Humlum and Vestergaard, 2025). Moreover, whether through passive exposure or active use, people often turn to AI for several practical reasons at once, such as saving time or working more efficiently, so trust, personal characteristics and everyday digital habits are likely to overlap and interact. However, the relative importance of these factors in people's actual AI use remains unclear.
@@ -66,48 +64,86 @@ income and AI awareness).
 | H5 (RQ3) | Machine-learning models predict both outcomes more accurately than traditional statistical models. | ML > regression | Online behaviour is complex, and factors may combine with each other (for example, age may matter more for people who use the internet less), which flexible models can capture better. |
 | H6 (RQ1) | The association between age and reading AI summaries becomes clearly weaker once digital habits are added to the model. | Age effect shrinks after controlling for digital habits | Older people may read AI summaries less mainly because they go online less and do fewer things online, not because of age itself. If the age effect remains strong after adding digital habits, other reasons (e.g. distrust of new technology) may also play a role. |
 
-## 6. 方法：每个模型 + 它的假设 + 怎么检验
-| 模型 | 用于 | 关键假设 | 怎么检验假设 / 假设不成立怎么办 |
+## 6. Methods: models, assumptions and checks
+| Model | Used for | Key assumption | How it will be checked / what if it fails |
 |---|---|---|---|
-| Ordered logit | Y1 解释 | Proportional odds：每个 X 对每一级的作用相同 | 💭 |
-| Poisson GLM | Y2 解释 | 方差 = 均值 | 💭 怎么判断？如果不满足呢？ |
-| Binomial GLM | Y2 解释 | 💭 为什么 Y2 可以看成"8 次试验中成功几次"？ | 💭 |
-| Regularised logistic | Y1 预测 | 💭 | — |
-| Random forest / XGBoost | Y1、Y2 预测 | 不假设线性，但可能过拟合 | 💭 怎么防止过拟合？ |
-| k-means | 用户分群 | 簇大致呈球形、大小相近；变量需标准化 | 💭 k 怎么选？ |
+| Ordered logit | Y1, explanation | Proportional odds (parallel lines): each predictor has the same effect at every step (never → sometimes → often → always) | Brant test. If a few predictors violate it, use a partial proportional odds model that relaxes the assumption for those predictors. Simpler fallback: binary logistic regression (reads at least sometimes vs never). |
+| Poisson GLM | Y2, explanation | Mean = variance | Dispersion statistic (Pearson χ²/df). If clearly > 1 (overdispersion), use negative binomial; if clearly < 1 (underdispersion), use binomial GLM. |
+| Binomial GLM | Y2, explanation | Y2 can be treated as the number of "yes" answers out of 8 possible purposes, which respects the upper limit of 8; the 8 purposes are assumed independent with the same probability for each person | The 8 purposes are likely to be related (e.g. work and writing). Check dispersion; if violated, use quasi-binomial to give more conservative standard errors. |
+| Regularised logistic regression | Y1, prediction (statistical benchmark for RQ3) | Effects are linear on the log-odds scale and additive; no interactions unless added | Regularisation (L2 penalty) reduces overfitting with many dummy variables. Penalty strength tuned by cross-validation. |
+| Random forest / XGBoost | Y1 and Y2, prediction | No linearity assumption, but prone to overfitting | Train/test split (80/20, stratified for Y1); 5-fold cross-validation on the training set only to tune parameters such as tree depth and number of trees; final performance reported once on the test set. |
+| Permutation importance / SHAP | Interpreting ML models | Importance is shared between correlated predictors | Interpret together with the regression results; group related variables where needed. |
+| k-means | Segmenting users by digital habits | Variables on comparable scales; clusters roughly spherical and of similar size | Standardise variables. Choose k using the elbow method, silhouette scores and whether clusters can be clearly interpreted. Report low silhouette scores honestly. |
+| Three-stage comparison (RQ4) | Contribution of each predictor block | Blocks may overlap, so the block added first may take credit for shared information | Run both orders (demographics → digital habits → AI attitudes, and demographics → AI attitudes → digital habits) and compare the gains in test performance. |
 
-## 7. 评估方式
-- 数据划分：💭（train/test 比例？cross-validation 几折？）
-- Y1 指标：💭（提示：为什么只看 accuracy 不够？有序类别适合什么指标？）
-- Y2 指标：💭
-- Baseline：💭（模型至少要比什么好？）
-- 防止 leakage：💭
+### Model selection rules (decided before seeing results)
+- **Y2: Poisson vs binomial vs negative binomial.** Fit Poisson first and check the
+  dispersion statistic. If it is clearly below 1, use binomial; if clearly above 1,
+  use negative binomial. Compare candidate models with AIC (lower is better). The
+  binomial model is also preferred in principle because Y2 cannot exceed 8.
+- **Random forest vs XGBoost.** Both will be trained and compared on the same
+  cross-validation metric. If one is clearly better, it will be used as the main ML
+  model; if they perform similarly, the simpler model (random forest) will be preferred
+  and both results reported.
+- **Permutation importance and SHAP.** These are complementary rather than alternatives:
+  permutation importance gives an overall ranking of predictors; SHAP shows the direction
+  of each predictor's contribution and how it varies across individuals. Permutation
+  importance will be done first; SHAP if time allows.
 
-## 8. 预计局限
-1. 💭
-2. 💭
-3. 💭
+## 7. Evaluation
+- **Data split:** 80% training / 20% test, stratified by Y1 category so that both sets
+  have the same class proportions. Fixed random seed (42) for reproducibility. The test
+  set is used only once, for the final comparison.
+- **Cross-validation:** 5-fold cross-validation on the training set only, used to tune
+  model parameters (e.g. regularisation strength, tree depth).
+- **Y1 metrics:** Accuracy alone is not enough. First, the largest category ("sometimes",
+  about 36% of the Y1 sample) gives a high accuracy even for a model that always predicts
+  it. Second, Y1 is ordinal, so predicting "often" when the answer is "always" is a smaller
+  error than predicting "never", but accuracy treats them the same. The main metric will
+  therefore be quadratic weighted kappa (QWK), which penalises larger ordinal errors more
+  and corrects for chance agreement. Accuracy and macro F1 will be reported as secondary
+  metrics.
+- **Y2 metrics:** Mean absolute error (MAE), interpreted as the average number of purposes
+  by which the prediction is wrong. RMSE as a secondary metric.
+- **Baselines:** Y1: always predict the most frequent category. Y2: always predict the
+  training-set mean. A model is only useful if it clearly beats these baselines.
+- **Preventing leakage:** Split the data before any preprocessing; fit scaling and
+  encoding on the training set only, inside a scikit-learn pipeline; tune parameters with
+  cross-validation, never on the test set; exclude any variable used to construct the
+  outcome (e.g. the A3 items when predicting Y2).
 
-## 9. 交付物与时间线
-| 交付物 | 截止 |
+## 8. Expected Limitations
+1. **Association, not causation.** The data is cross-sectional, so the analysis can only
+   show associations and predictions. Some predictors may also be influenced by the
+   outcome (e.g. using AI and reading AI summaries may reinforce each other).
+2. **Use, not reliance.** A6 measures how often people read AI summaries, not whether they
+   trust them or act on them, so the project measures AI use rather than reliance on AI.
+3. **Self-reported data.** Respondents may not recognise AI summaries as AI-generated or
+   may misremember how often they read them. For example, about 41% of respondents who had
+   never heard of AI still reported reading AI summaries at least sometimes.
+4. **Survey mode effects.** Online and face-to-face respondents answer A6 very differently
+   (19% vs 43% never read or never seen). Controlling for P_METHOD reduces but cannot fully
+   separate differences in who was interviewed from differences caused by the interview
+   mode itself.
+5. **Smaller samples and limited generalisability.** Because of the modular design, Y1 is
+   based on 3,515 respondents (3,178 in the ordinal model), and Y2 only on 2,061 AI users,
+   so Y2 findings cannot be generalised to non-users.
+6. **Coarse measures.** Age and income are only available in bands, Y1 has four levels, and
+   Y2 counts how many purposes AI is used for, not how often or how intensively.
+7. **A snapshot of a fast-changing technology.** The data reflects 2025; patterns of AI use
+   may change quickly as the technology and its availability develop.
+
+## 9. Deliverables and Timeline
+| Deliverable | Target date |
 |---|---|
-| 规划书 v1 | 10/12 |
-| 清洗 + EDA | 10/18 |
-| 回归 | 10/25 |
-| ML + 三阶段比较 | 11/7 |
-| 聚类 | 11/14 |
-| 报告 | 11/28 |
-| Demo | 12/9 |
-
-## 10. 变更记录
-| 日期 | 改了什么 | 为什么 |
-|---|---|---|
-| | | |
-
-## 11. 想问老师的问题（office hour）
-1. 这个项目能否作为课程 final project？
-2. 二手公开数据需要 ethics 审批吗？
-3. 💭 你自己最没把握的一个方法问题
+| Plan v1 (sections 1–5, 11) | 20 Oct |
+| Python basics + data cleaning | 1 Nov |
+| EDA | 7 Nov |
+| Regression | 15 Nov |
+| Machine learning + three-stage comparison | 29 Nov |
+| Clustering | 5 Dec |
+| Report | 9 Dec |
+| Demo | 13 Dec |
 
 ## References
 
