@@ -234,3 +234,40 @@
     `value_counts()` and `pd.crosstab()`, including reproducing the 41% figure.
   - Then start data cleaning: select the samples and handle missing values and special codes
     (A6 = 5, E9 = 8, and respondents not asked A4/A5) as set out in the plan.
+
+## 2026-10-27 (time: ~? h)
+- **What I did:**
+  1. **Loaded the data in Python.** Uploaded the CSV to Google Drive and opened it in
+     Google Colab with pandas (notebook `01_load_data.ipynb`): 7,533 rows × 566 columns.
+  2. **Handled blank cells.** Blank cells are stored as a space (" "), so `value_counts()`
+     counted 4,018 "space" answers in A6. Re-read the file with `na_values=' '` so they are
+     treated as missing (NaN).
+  3. **Reproduced the Excel checks in Python:**
+     - A6: 3,515 valid answers + 4,018 missing = 7,533.
+     - MODULEA = 1: 3,768. A6 sample (MODULEA = 1 and INTUSED = 1): N = 3,515, with no
+       missing A6 values.
+  4. **Reproduced the cross-tabs with `pd.crosstab()`** (row percentages):
+     - Survey mode × A6, "never read" + "never seen": 19.1% online vs 43.3% face-to-face.
+     - SUMAI × A6, read at least sometimes (A6 = 1–3): 90.4% (used AI) vs 41.1% (unaware
+       of AI).
+     - Income DK (E9 = 8) × A6, "never read" + "never seen": 37.4% (DK) vs 21.2% (others).
+     - All figures match the Excel results.
+
+- **Concepts I learned:**
+  - CSV, DataFrame (a table) and Series (one column); `df.shape`, `df.head()`.
+  - `=` stores a value; `==` asks "is it equal?" and returns True/False.
+  - `value_counts()`, `isna().sum()`, chaining methods with `.`.
+  - Filtering rows with conditions: `df[(cond1) & (cond2)]`; brackets are required.
+  - `pd.crosstab()` with `normalize='index'` gives row percentages.
+  - `table[col]` selects a column; `table.loc[row]` selects a row. Adding two columns
+    matches values by row label.
+  - Using a condition (e.g. `E9 == 8`) directly as the rows of a cross-tab.
+
+- **Problems I ran into:**
+  1. Values in A6 now show as 1.0, 2.0 instead of 1, 2. A column containing NaN is stored
+     as decimals (float); the values themselves are unchanged.
+  2. Adding two rounded percentages gave 0.192 instead of 0.191. Rounding should be done
+     after adding, not before.
+
+- **Next step:**
+  - Start data cleaning: recode A6 = 5, E9 = 8 and the A4/A5 "unaware /
