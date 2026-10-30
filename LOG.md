@@ -271,3 +271,37 @@
 
 - **Next step:**
   - Start data cleaning: recode A6 = 5, E9 = 8 and the A4/A5 "unaware /
+
+## 2026-10-30 (time: 2 h, started on the evening of 27 Oct)
+- **What I did:**
+  1. Started data cleaning in a new notebook `02_cleaning.ipynb`. Re-loaded the data and
+     filtered the A6 sample (MODULEA = 1 and INTUSED = 1, N = 3,515) using `.copy()`, so
+     the original data stays unchanged.
+  2. **Y1:** reverse-coded A6 into 0 = never read, 1 = sometimes, 2 = often, 3 = always.
+     A6 = 5 ("never seen") was set to missing, so the Y1 sample is N = 3,178.
+  3. **seen_summary:** 1 = has seen AI summaries (3,178), 0 = never seen (337).
+  4. **income_dk:** 1 = income "don't know / prefer not to say" (E9 = 8, n = 727),
+     0 = others (2,788).
+  5. **A4_c / A5_c:** respondents unaware of AI (SUMAI = 3) were not asked A4 or A5.
+     Filled these blanks with 0 = "unaware of AI / not asked". Checked with cross-tabs
+     that 0 appears only for SUMAI = 3 (n = 241). The original A4/A5 columns are kept.
+  6. Saved the cleaned sample as `sample_clean_v1.csv` (3,515 × 571) and read it back to
+     check the shape.
+
+- **Concepts I learned:**
+  - Variables, `numpy` / `np.nan`, and why `.copy()` is needed before adding columns.
+  - `.map()` with a dictionary: values not in the dictionary become NaN.
+  - `!=`, `.astype(int)` to turn True/False into 1/0.
+  - `.fillna()` fills only missing cells; `dropna=False` shows NaN in `value_counts()`.
+  - `.sort_index()` sorts by row labels, so it belongs after `value_counts()`.
+  - `.to_csv(..., index=False)` saves a table without the row labels.
+
+- **Problems I ran into:**
+  1. My first version of A4_c only flagged SUMAI = 3 (0/1), which lost the original A4
+     answers. Fixed by using `A4.fillna(0)` so the answers 1–4 are kept.
+  2. Adding `.sort_index()` when creating a column had no effect, because it sorts by
+     respondent row number. It is only useful on the `value_counts()` output.
+
+- **Next step:**
+  - Data cleaning part 2: build Y2 (number of AI uses, A3A–A3H, AI users only), the
+    0–13 online activity count (Q13A–Q13M), and select the three groups of predictors.
