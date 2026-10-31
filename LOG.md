@@ -235,7 +235,7 @@
   - Then start data cleaning: select the samples and handle missing values and special codes
     (A6 = 5, E9 = 8, and respondents not asked A4/A5) as set out in the plan.
 
-## 2026-10-27 (time: ~? h)
+## 2026-10-27 (time: 2 h)
 - **What I did:**
   1. **Loaded the data in Python.** Uploaded the CSV to Google Drive and opened it in
      Google Colab with pandas (notebook `01_load_data.ipynb`): 7,533 rows × 566 columns.
@@ -270,7 +270,8 @@
      after adding, not before.
 
 - **Next step:**
-  - Start data cleaning: recode A6 = 5, E9 = 8 and the A4/A5 "unaware /
+     - Start data cleaning: recode A6 = 5, E9 = 8 and the A4/A5 "unaware / not asked"
+       category, and build the 0–13 online activity count from Q13A–Q13M.
 
 ## 2026-10-30 (time: 2 h, started on the evening of 27 Oct)
 - **What I did:**
@@ -306,7 +307,7 @@
   - Data cleaning part 2: build Y2 (number of AI uses, A3A–A3H, AI users only), the
     0–13 online activity count (Q13A–Q13M), and select the three groups of predictors.
 
-## 2026-10-31 (time: 3 h)
+## 2026-10-31 (time: ~6.5 h)
 - **What I did:**
   1. Continued `02_cleaning.ipynb`.
   2. **Y2:** summed A3A–A3H (eight AI uses) for each respondent. Non-users (SUMAI = 2 or 3,
@@ -318,15 +319,51 @@
   4. **activity_count:** summed Q13A–Q13M (0–13, no missing). A cross-tab with BREADTH
      matches its bands exactly (0 / 1–4 / 5–8 / 9–13), confirming the calculation.
      BREADTH's top band combines 1,239 respondents with 9–13 activities.
-  5. Saved `sample_clean_v2.csv`.
+     Saved `sample_clean_v2.csv`.
+  5. **Rule for small categories** in categorical variables: categories with fewer than
+     30 respondents (about 1%) are merged with a similar category; if none fits, merged
+     into an "other/unknown" group of at least 30; otherwise those respondents are
+     dropped and this is reported. Numeric variables are not affected.
+  6. **device_counts** (Q10A–Q10F, 1–6) and **social_counts** (Q16A–Q16L, 0–12). Net
+     codes were excluded to avoid double counting. The 378 respondents with 0 platforms
+     are the 363 coded "do not use / unsure" plus 15 who chose "none of these".
+  7. **edu_c:** merged the 15 E5 options into 8 groups by UK qualification level: no
+     qualifications / entry level (231), Level 1–2 (988), Level 3 (596), Level 4–5 (326),
+     Level 6 (775), Level 7–8 (514), still studying (47), don't know / prefer not to
+     say (38).
+  8. **work_c:** merged "prefer not to say" (10) into "other" (53), giving 63.
+  9. **online_time_c:** S1 code 1 is "None" (0 hours a week). These 18 respondents do the
+     fewest online activities, so dropping them could bias the sample; merged with "up
+     to 2 hours" (79 in total). "Don't know" (38) kept as its own category.
+     Saved `sample_clean_v2b.csv`.
+  10. **online_conf:** combined Q12A–Q12D (confidence as an internet user, recognising
+      adverts, judging true/false information, spotting scams). Set "don't know" (6) to
+      missing, reverse-coded (6 − score) so higher = more confident, and took the mean of
+      the answered items. No respondent answered "don't know" to all four, so no one was
+      lost. Mean 4.08, median 4.25 (range 1–5). Internal consistency (correlations,
+      Cronbach's alpha) still needs to be calculated in EDA.
+  11. **new_sites_c (A7):** merged "not gone online in the last month" (47) into "only used
+      websites/apps used before" (1,453 in total), as both mean not trying anything new.
+      "Don't know" (91) kept as its own category, so A7 is treated as categorical.
+  12. **Dropped 19 respondents:** gender non-binary / prefer not to say (10) and SEG
+      "don't know" (9), as these groups stay below 30 even when combined. Results
+      therefore cannot be generalised to non-binary respondents.
+      Final sample: 3,496. Y1 sample: 3,161. Y2 sample: 2,047.
+  13. Saved the final cleaned dataset `sample_clean_v3.csv` (3,496 × 580).
 
 - **Concepts I learned:**
   - Selecting several columns with a list: `df[list_of_columns]`.
-  - `.sum(axis=1)` adds across columns (one value per respondent); `axis=0` adds down
-    each column.
-  - `|` means "or", `&` means "and"; `!= 1` and `.isin([2, 3])` give the same result here.
+  - `.sum(axis=1)` / `.mean(axis=1)` work across columns (one value per respondent);
+    `axis=0` works down each column.
+  - `|` means "or", `&` means "and", `~` means "not"; `.isin([...])` checks membership.
   - `.loc[rows, column] = value`: rows can be selected with a True/False condition.
-  - `value_counts()` summarises a column; it does not change the column itself.
+  - `.replace()` keeps values not in the dictionary; `.map()` turns them into NaN.
+  - `.drop(columns=[...])` removes columns; `df[~condition]` removes rows.
+  - `.describe()` summarises a numeric variable.
+  - A variable can be treated as numeric only if all its values fit on one scale;
+    "don't know" categories make it categorical.
+  - Combining several questions into one score is reasonable when they measure the same
+    thing (checked with correlations and Cronbach's alpha).
 
 - **Problems I ran into:**
   1. Using `&` for "SUMAI = 2 and SUMAI = 3" returned no one, because one person cannot
@@ -334,31 +371,14 @@
   2. Stored a condition with `.value_counts()` on the end, which turns it into a count
      table instead of one True/False per person, so it cannot be used to select rows.
   3. Wrote `.loc(...)` with round brackets; `.loc` needs square brackets.
-
-- **Next step:**
-  - Review the three predictor blocks in PLAN section 4 (demographics, digital habits,
-    AI attitudes): check codes such as "don't know", merge small categories, and save
-    the final cleaned dataset.
-    
-  - **Late evening session:**
-  1. **online_conf:** combined Q12A–Q12D (confidence as an internet user, recognising
-     adverts, judging true/false information, spotting scams). Set "don't know" (6) to
-     missing, reverse-coded (6 − score) so higher = more confident, and took the mean
-     of the answered items. No respondent answered "don't know" to all four, so no one
-     was lost. Mean 4.08, median 4.25 (range 1–5). Internal consistency (correlations,
-     Cronbach's alpha) still needs to be calculated in EDA.
-  2. **new_sites_c (A7):** merged "not gone online in the last month" (47) into "only
-     used websites/apps used before" (1,453 in total), as both mean not trying anything
-     new. "Don't know" (91) kept as its own category, so A7 is treated as categorical.
-  3. Dropped 19 respondents (gender non-binary / prefer not to say, SEG don't know).
-     Final sample: 3,496. Y1 sample: 3,161. Y2 sample: 2,047.
-  4. Saved the final cleaned dataset `sample_clean_v3.csv` (3,496 × 580).
-
-- **Problems I ran into:**
-  - Wrote `sample['S4'] == 3|5`, which Python reads as `== 7`. Used `.isin([3, 5])`.
-  - Wrote `sample[condition] = np.nan`, which set whole rows to missing instead of
-    selecting them. Re-loaded the saved v2b file and re-ran the later steps. Saving a
-    version after each stage made this easy to recover from.
+  4. Reading the codebook with pandas showed the S1 code 1 label as missing, because
+     pandas treats the word "None" as a missing value. Checked the original file.
+  5. Used a hyphen in a column name (`online-time_c`); renamed it with an underscore,
+     since a hyphen can be read as a minus sign in model formulas.
+  6. Wrote `sample['S4'] == 3|5`, which Python reads as `== 7`. Used `.isin([3, 5])`.
+  7. Wrote `sample[condition] = np.nan`, which set whole rows to missing instead of
+     selecting them. Re-loaded the saved v2b file and re-ran the later steps. Saving a
+     version after each stage made this easy to recover from.
 
 - **Next step:**
   - Update the sample sizes in PLAN.md, then start EDA.
