@@ -305,3 +305,37 @@
 - **Next step:**
   - Data cleaning part 2: build Y2 (number of AI uses, A3A–A3H, AI users only), the
     0–13 online activity count (Q13A–Q13M), and select the three groups of predictors.
+
+## 2026-10-31 (time: 3 h)
+- **What I did:**
+  1. Continued `02_cleaning.ipynb`.
+  2. **Y2:** summed A3A–A3H (eight AI uses) for each respondent. Non-users (SUMAI = 2 or 3,
+     n = 1,455) are coded 0 in A3 rather than blank, so I set their Y2 to missing.
+     Y2 is defined for 2,060 AI users: 0 (36), 1 (555), 2 (484), 3 (395), 4 (249),
+     5 (163), 6 (108), 7 (41), 8 (29).
+  3. The 36 AI users with Y2 = 0 selected only "other" (A3I, n = 19) or "don't know"
+     (A3J, n = 17). Kept them with Y2 = 0, since Y2 counts the eight listed uses only.
+  4. **activity_count:** summed Q13A–Q13M (0–13, no missing). A cross-tab with BREADTH
+     matches its bands exactly (0 / 1–4 / 5–8 / 9–13), confirming the calculation.
+     BREADTH's top band combines 1,239 respondents with 9–13 activities.
+  5. Saved `sample_clean_v2.csv`.
+
+- **Concepts I learned:**
+  - Selecting several columns with a list: `df[list_of_columns]`.
+  - `.sum(axis=1)` adds across columns (one value per respondent); `axis=0` adds down
+    each column.
+  - `|` means "or", `&` means "and"; `!= 1` and `.isin([2, 3])` give the same result here.
+  - `.loc[rows, column] = value`: rows can be selected with a True/False condition.
+  - `value_counts()` summarises a column; it does not change the column itself.
+
+- **Problems I ran into:**
+  1. Using `&` for "SUMAI = 2 and SUMAI = 3" returned no one, because one person cannot
+     have both values. Changed to `|`.
+  2. Stored a condition with `.value_counts()` on the end, which turns it into a count
+     table instead of one True/False per person, so it cannot be used to select rows.
+  3. Wrote `.loc(...)` with round brackets; `.loc` needs square brackets.
+
+- **Next step:**
+  - Review the three predictor blocks in PLAN section 4 (demographics, digital habits,
+    AI attitudes): check codes such as "don't know", merge small categories, and save
+    the final cleaned dataset.
