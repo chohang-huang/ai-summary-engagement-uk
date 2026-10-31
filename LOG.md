@@ -339,3 +339,26 @@
   - Review the three predictor blocks in PLAN section 4 (demographics, digital habits,
     AI attitudes): check codes such as "don't know", merge small categories, and save
     the final cleaned dataset.
+    
+  - **Late evening session:**
+  1. **online_conf:** combined Q12A–Q12D (confidence as an internet user, recognising
+     adverts, judging true/false information, spotting scams). Set "don't know" (6) to
+     missing, reverse-coded (6 − score) so higher = more confident, and took the mean
+     of the answered items. No respondent answered "don't know" to all four, so no one
+     was lost. Mean 4.08, median 4.25 (range 1–5). Internal consistency (correlations,
+     Cronbach's alpha) still needs to be calculated in EDA.
+  2. **new_sites_c (A7):** merged "not gone online in the last month" (47) into "only
+     used websites/apps used before" (1,453 in total), as both mean not trying anything
+     new. "Don't know" (91) kept as its own category, so A7 is treated as categorical.
+  3. Dropped 19 respondents (gender non-binary / prefer not to say, SEG don't know).
+     Final sample: 3,496. Y1 sample: 3,161. Y2 sample: 2,047.
+  4. Saved the final cleaned dataset `sample_clean_v3.csv` (3,496 × 580).
+
+- **Problems I ran into:**
+  - Wrote `sample['S4'] == 3|5`, which Python reads as `== 7`. Used `.isin([3, 5])`.
+  - Wrote `sample[condition] = np.nan`, which set whole rows to missing instead of
+    selecting them. Re-loaded the saved v2b file and re-ran the later steps. Saving a
+    version after each stage made this easy to recover from.
+
+- **Next step:**
+  - Update the sample sizes in PLAN.md, then start EDA.
