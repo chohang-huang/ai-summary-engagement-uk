@@ -27,8 +27,9 @@ This project therefore asks: among UK adults, which factors are most strongly as
 | Data | Ofcom Adults' Media Literacy Tracker 2025, respondent-level CSV, with SPSS codebook |
 | Total sample | 7,533 UK adults (online 5,449 / face-to-face CAPI 2,084) |
 | AI module | The AI questions (A1–A11) are only in Module 1, which was given to 3,768 respondents |
-| Y1 sample | A6 was asked only of Module 1 respondents who use the internet: N = 3,515. Respondents who answered "never seen these summaries / don't know what they are" (A6 = 5, n = 337) are not on the frequency scale, so they are excluded from the ordinal model (N = 3,178) and described separately. |
-| Y2 sample | A3 (AI uses) applies only to AI users (SUMAI = 1): N = 2,061. Non-users are coded 0 rather than left blank, so the sample must be filtered on SUMAI before building Y2. |
+| Y1 sample | A6 was asked only of Module 1 respondents who use the internet: N = 3,515, or 3,496 after exclusions (see below). Respondents who answered "never seen these summaries / don't know what they are" (A6 = 5, n = 335) are not on the frequency scale, so they are excluded from the ordinal model (N = 3,161) and described separately. |
+| Y2 sample | A3 (AI uses) applies only to AI users (SUMAI = 1). Within the analysis sample: N = 2,047. Non-users are coded 0 rather than left blank, so the sample must be filtered on SUMAI before building Y2. |
+| Exclusions | 19 respondents were dropped because their categories were too small to estimate (fewer than 30 even when combined): gender non-binary / prefer not to say (10) and socio-economic group "don't know" (9). Final analysis sample: 3,496. |
 | Weights | The weighting variable WT will be used for descriptive statistics, so that percentages represent the UK adult population. Models will be estimated unweighted, because the variables used to build the weights (e.g. age, gender) are included as predictors; weighted models will be run as a sensitivity check. |
 
 ## 4. Variables
@@ -126,7 +127,7 @@ income and AI awareness).
    separate differences in who was interviewed from differences caused by the interview
    mode itself.
 5. **Smaller samples and limited generalisability.** Because of the modular design, Y1 is
-   based on 3,515 respondents (3,178 in the ordinal model), and Y2 only on 2,061 AI users,
+   based on 3,496 respondents (3,161 in the ordinal model), and Y2 only on 2,047 AI users,
    so Y2 findings cannot be generalised to non-users.
 6. **Coarse measures.** Age and income are only available in bands, Y1 has four levels, and
    Y2 counts how many purposes AI is used for, not how often or how intensively.
